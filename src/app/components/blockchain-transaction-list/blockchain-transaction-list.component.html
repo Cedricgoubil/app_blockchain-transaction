@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="input-group input-group-sm my-2">
+    <span style="margin-right: -40px" class="input-group-text text-dark"
+      ><i class="fa-thin fa-search" style="color: #fb2056"></i
+    ></span>
+    <input
+      class="form-control"
+      type="text"
+      placeholder="Search for block"
+      [(ngModel)]="searchTerm"
+    />
+    <button class="btn btn-secondary my-2 my-sm-0" type="submit">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+  </div>
+  <div class="text-white text-center">
+    <h2 *ngIf="(allTransactionBlocks | searchFilter: searchTerm)?.length == 0">
+      No Launch found!
+    </h2>
+  </div>
+  <table class="table table-hover table-striped">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Level</th>
+        <th scope="col" class="text-center">Proposer</th>
+        <th scope="col">Timestamp</th>
+        <th scope="col">Transaction count</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        class="table-primary"
+        *ngFor="
+          let transactionBlock of allTransactionBlocks
+            | searchFilter: searchTerm
+        "
+      >
+        <td></td>
+        <td>{{ transactionBlock?.level }}</td>
+        <td>
+          {{ transactionBlock?.proposer?.alias }}
+          <span *ngIf="transactionBlock?.proposer">/</span>
+          {{ transactionBlock?.proposer?.address }}
+        </td>
+        <td>{{ transactionBlock?.timestamp | date: "full" }}</td>
+        <td>number of transactions</td>
+        <td>
+          <button
+            routerLink="/blockchain-transaction-details/{{
+              transactionBlock?.level
+            }}"
+            type="button"
+            class="btn btn-link"
+          >
+            Details
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="text-center">
+    <h2 *ngIf="(allTransactionBlocks | searchFilter: searchTerm)?.length == 0">
+      Nothing found!
+    </h2>
+  </div>
+</div>
