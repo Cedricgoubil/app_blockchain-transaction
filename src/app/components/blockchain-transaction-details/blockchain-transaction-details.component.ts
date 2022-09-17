@@ -23,28 +23,28 @@ export class BlockchainTransactionDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
-    this.getAllTransactionForBlocks();
-    this.getTransactionForBlocks();
-    this.getTransaction();
+    // this.getAllTransactionForBlocks();
+    // this.getTransactionForBlocks();
+    // this.getTransaction();
   }
 
-  getAllTransactionForBlocks() {
-    this.blockchainTransactionService.getTransactionBlocks(this.id).then((results) => {
-      this.allTransactionBlocks = results;
-    })
-  }
+  // getAllTransactionForBlocks() {
+  //   this.blockchainTransactionService.getTransactionBlocks(this.id).then((results) => {
+  //     this.allTransactionBlocks = results;
+  //   })
+  // }
 
-  getTransactionForBlocks() {
-    this.blockchainTransactionService.getTransaction().then((results) => {
-      this.transactionBlocks = results;
-    })
-  }
+  // getTransactionForBlocks() {
+  //   this.blockchainTransactionService.getTransaction().then((results) => {
+  //     this.transactionBlocks = results;
+  //   })
+  // }
 
-  getTransaction() {
-    this.blockchainTransactionService.getTransactionBlocks(this.id).then((results) => {
-      this.transaction = this.transactionBlocks?.filter((item: BlockchainTransactionDetailsDto) => item?.level === results?.level)
-    })
-  }
+  // getTransaction() {
+  //   this.blockchainTransactionService.getTransactionBlocks(this.id).then((results) => {
+  //     this.transaction = this.transactionBlocks?.filter((item: BlockchainTransactionDetailsDto) => item?.level === results?.level)
+  //   })
+  // }
 }
 
 

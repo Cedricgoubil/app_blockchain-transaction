@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BlockchainTransactionListDto } from '../dto/BlockchainTransactionListDto';
 import { BlockchainTransactionDetailsDto } from '../dto/BlockchainTransactionDetailsDto';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,24 +16,37 @@ export class BlockchainTransactionService {
     private http: HttpClient
   ) { }
 
-  getAllTransactionBlocks() {
-    return this.http
-      .get<any>(this.urlBlocks)
-      .toPromise()
-      .then((res) => res as BlockchainTransactionListDto[]);
+  getAllTransactionBlocks(): Observable<BlockchainTransactionListDto[]> {
+    return this.http.get<BlockchainTransactionListDto[]>(`${this.urlBlocks}`);
   }
 
-  getTransactionBlocks(id: string) {
-    return this.http
-      .get<any>(this.urlBlocks + `/${id}`)
-      .toPromise()
-      .then((res) => res as BlockchainTransactionListDto);
+  getTransactionBlocks(id: string): Observable<BlockchainTransactionListDto> {
+    return this.http.get<BlockchainTransactionListDto>(`${this.urlBlocks + id}`);
   }
 
-  getTransaction() {
-    return this.http
-      .get<any>(this.urlTransactionBlocks)
-      .toPromise()
-      .then((res) => res as BlockchainTransactionDetailsDto[]);
+  getTransaction(): Observable<BlockchainTransactionDetailsDto[]> {
+    return this.http.get<BlockchainTransactionDetailsDto[]>(`${this.urlTransactionBlocks}`);
   }
+
+  // getAllTransactionBlocks() {
+  //   return this.http
+  //     .get<any>(this.urlBlocks)
+  //     .toPromise()
+  //     .then((res) => res as BlockchainTransactionListDto[]);
+  // }
+
+  // getTransactionBlocks(id: string) {
+  //   return this.http
+  //     .get<any>(this.urlBlocks + `/${id}`)
+  //     .toPromise()
+  //     .then((res) => res as BlockchainTransactionListDto);
+  // }
+
+  // getTransaction() {
+  //   return this.http
+  //     .get<any>(this.urlTransactionBlocks)
+  //     .toPromise()
+  //     .then((res) => res as BlockchainTransactionDetailsDto[]);
+  // }
 }
+

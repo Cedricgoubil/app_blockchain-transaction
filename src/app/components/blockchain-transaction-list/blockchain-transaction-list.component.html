@@ -14,7 +14,7 @@
     </button>
   </div>
   <div class="text-white text-center">
-    <h2 *ngIf="(allTransactionBlocks | searchFilter: searchTerm)?.length == 0">
+    <h2 *ngIf="(allTransactionBlocksFromStore$ | async)?.length == 0">
       No Launch found!
     </h2>
   </div>
@@ -32,10 +32,7 @@
     <tbody>
       <tr
         class="table-primary"
-        *ngFor="
-          let transactionBlock of allTransactionBlocks
-            | searchFilter: searchTerm
-        "
+        *ngFor="let transactionBlock of allTransactionBlocksFromStore$ | async"
       >
         <td></td>
         <td>{{ transactionBlock?.level }}</td>
@@ -61,7 +58,7 @@
     </tbody>
   </table>
   <div class="text-center">
-    <h2 *ngIf="(allTransactionBlocks | searchFilter: searchTerm)?.length == 0">
+    <h2 *ngIf="(allTransactionBlocksFromStore$ | async)?.length == 0">
       Nothing found!
     </h2>
   </div>

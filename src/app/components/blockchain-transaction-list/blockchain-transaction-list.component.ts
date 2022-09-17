@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { BlockchainTransactionListDto } from 'src/app/dto/BlockchainTransactionListDto';
 import { BlockchainTransactionService } from 'src/app/services/blockchain-transaction.service';
+import * as fromAppStore from '../../store';
 
 @Component({
   selector: 'app-blockchain-transaction-list',
@@ -8,21 +11,26 @@ import { BlockchainTransactionService } from 'src/app/services/blockchain-transa
   styleUrls: ['./blockchain-transaction-list.component.css']
 })
 export class BlockchainTransactionListComponent implements OnInit {
-  allTransactionBlocks?: BlockchainTransactionListDto[] | any;
+  allTransactionBlocksFromStore$: Observable<BlockchainTransactionListDto[]> | undefined;
   searchTerm?: string | any;
 
   constructor(
-    private blockchainTransactionService: BlockchainTransactionService
+    private appStore: Store<fromAppStore.AppState>,
+    // private blockchainTransactionService: BlockchainTransactionService
   ) { }
 
   ngOnInit(): void {
-    this.getTransactionBlocks()
+    // this.getTransactionBlocks()
+    this.appStore.dispatch(fromAppStore.loadAllBlockchainTransactionList());
+    this.allTransactionBlocksFromStore$ = this.appStore.select<any>(
+      (state: any) => state.appTransactionList.blockchainTransactionListItems
+    );
   }
 
-  getTransactionBlocks() {
-    this.blockchainTransactionService.getAllTransactionBlocks().then((resultData) => {
-      resultData.reverse();
-      this.allTransactionBlocks = resultData;
-    })
-  }
+  // getTransactionBlocks() {
+  //   this.blockchainTransactionService.getAllTransactionBlocks().then((resultData) => {
+  //     resultData.reverse();
+  //     this.allTransactionBlocks = resultData;
+  //   })
+  // }
 }
