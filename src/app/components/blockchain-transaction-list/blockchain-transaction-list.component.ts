@@ -14,7 +14,7 @@ export class BlockchainTransactionListComponent implements OnInit {
   allTransactionBlocksFromStore$: Observable<BlockchainTransactionListDto[]> | undefined;
 
   constructor(
-    private appStore: Store<fromAppStore.AppState>,
+    private appStore: Store<fromAppStore.AppBlockchainTransactionDetailsState>,
   ) { }
 
   ngOnInit(): void {

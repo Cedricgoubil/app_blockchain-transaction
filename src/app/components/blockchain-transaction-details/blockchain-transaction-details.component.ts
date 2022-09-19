@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
 import { BlockchainTransactionDetailsDto } from 'src/app/dto/BlockchainTransactionDetailsDto';
 import { BlockchainTransactionListDto } from 'src/app/dto/BlockchainTransactionListDto';
 import { BlockchainTransactionService } from 'src/app/services/blockchain-transaction.service';
 import * as fromAppStore from '../../store';
-import { Observable } from 'rxjs';
+import { filter, Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-blockchain-transaction-details',
@@ -20,11 +20,17 @@ export class BlockchainTransactionDetailsComponent implements OnInit {
 
   allTransactionBlocksFromStore$: Observable<BlockchainTransactionListDto[]> | undefined;
   transactionBlocks?: BlockchainTransactionDetailsDto[] | any;
-  transaction?: BlockchainTransactionDetailsDto[] = [];
+  // transaction?: BlockchainTransactionDetailsDto[] = [];
+
+  private subscription: Subscription;
+
+
+  transaction: BlockchainTransactionDetailsDto = new BlockchainTransactionDetailsDto();
+  transactionOrig?: BlockchainTransactionDetailsDto;
 
   constructor(
     private blockchainTransactionService: BlockchainTransactionService,
-    private appStore: Store<fromAppStore.AppState>,
+    private appStore: Store<fromAppStore.AppBlockchainTransactionDetailsState>,
     private route: ActivatedRoute,
   ) { }
 
@@ -36,6 +42,17 @@ export class BlockchainTransactionDetailsComponent implements OnInit {
   }
 
   getTransaction(transactionId: string) {
+    this.subscription = this.appStore
+      .pipe(
+        select(fromAppStore.getTransactionCurrent),
+        filter((item) => !!item)
+      )
+      .subscribe((item) => {
+        this.transactionOrig = item;
+        this.transaction = { ...item } as BlockchainTransactionDetailsDto; // clone
+      });
+
+
     this.appStore.dispatch(
       fromAppStore.getTransactionDetails({ id: transactionId })
     );

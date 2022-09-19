@@ -44,3 +44,10 @@ export function appBlockchainTransactionDetailsReducer(
 ) {
   return appBlockchainTransactionDetailsInternal(state, action);
 }
+
+export const getTransactionCurrent = (state: AppBlockchainTransactionDetailsState) => {
+  if (!state) {
+    return new BlockchainTransactionDetailsDto();
+  }
+  return state.blockchainTransactionCurrent;
+};
