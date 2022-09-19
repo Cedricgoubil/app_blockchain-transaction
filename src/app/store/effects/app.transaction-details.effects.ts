@@ -7,30 +7,28 @@ import * as blockchainTransactionDetailsAction from '../actions/app.transaction-
 
 @Injectable()
 export class BlockchainTransactionDetailsEffects {
-  loadAllBlockchainTransactionDetails$ = createEffect(() =>
+  getTransactionDetails$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(blockchainTransactionDetailsAction.loadAllBlockchainTransactionDetails),
-      switchMap(() =>
-        this.blockchainTransactionService.getTransaction().pipe(
+      ofType(blockchainTransactionDetailsAction.getTransactionDetails),
+      switchMap((action) =>
+        this.blockchainTransactionService.searchById(action.id).pipe(
           map((blockchainTransaction) =>
-            blockchainTransactionDetailsAction.loadAllBlockchainTransactionDetailsFinished({
-              payLoad: blockchainTransaction,
-            })
+            blockchainTransactionDetailsAction.getTransactionDetailsFinished({ payLoad: blockchainTransaction })
           ),
           catchError((error) =>
-            of(blockchainTransactionDetailsAction.loadAllBlockchainTransactionDetailsFailed({ payLoad: error }))
+            of(blockchainTransactionDetailsAction.getTransactionDetailsFailed({ payLoad: error }))
           )
         )
       )
     )
   );
 
-  loadAllBlockchainTransactionDetailsFailed = createEffect(
+  getTransactionDetailsFailed = createEffect(
     () => () =>
       this.actions$.pipe(
-        ofType(blockchainTransactionDetailsAction.loadAllBlockchainTransactionDetailsFailed),
+        ofType(blockchainTransactionDetailsAction.getTransactionDetailsFailed),
         tap((error) => {
-          alert(error)
+          console.log(error)
         })
       ),
     {

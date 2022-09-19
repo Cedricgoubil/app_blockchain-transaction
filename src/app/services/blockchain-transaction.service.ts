@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 export class BlockchainTransactionService {
   private urlBlocks = 'https://api.tzkt.io/v1/blocks';
   private urlTransactionBlocks = 'https://api.tzkt.io/v1/operations/transactions';
+  // private urlTransactionCount = 'https://api.tzkt.io/v1/operations/transactions/count';
 
 
   constructor(
@@ -20,19 +21,16 @@ export class BlockchainTransactionService {
     return this.http.get<BlockchainTransactionListDto[]>(`${this.urlBlocks}`);
   }
 
-  getTransactionBlocks(id: string): Observable<BlockchainTransactionListDto> {
-    return this.http.get<BlockchainTransactionListDto>(`${this.urlBlocks + id}`);
+  searchById(id: string): Observable<BlockchainTransactionDetailsDto> {
+    return this.http.get<BlockchainTransactionDetailsDto>(this.urlTransactionBlocks + `/${id}`)
   }
 
-  getTransaction(): Observable<BlockchainTransactionDetailsDto[]> {
-    return this.http.get<BlockchainTransactionDetailsDto[]>(`${this.urlTransactionBlocks}`);
-  }
 
-  // getAllTransactionBlocks() {
+  // getTransaction() {
   //   return this.http
-  //     .get<any>(this.urlBlocks)
+  //     .get<any>(this.urlTransactionBlocks)
   //     .toPromise()
-  //     .then((res) => res as BlockchainTransactionListDto[]);
+  //     .then((res) => res as BlockchainTransactionDetailsDto[]);
   // }
 
   // getTransactionBlocks(id: string) {
@@ -42,11 +40,13 @@ export class BlockchainTransactionService {
   //     .then((res) => res as BlockchainTransactionListDto);
   // }
 
-  // getTransaction() {
-  //   return this.http
-  //     .get<any>(this.urlTransactionBlocks)
-  //     .toPromise()
-  //     .then((res) => res as BlockchainTransactionDetailsDto[]);
+  // With Observable
+  // getTransactionBlocks(id: string): Observable<BlockchainTransactionListDto> {
+  //   return this.http.get<BlockchainTransactionListDto>(`${this.urlBlocks + id}`);
+  // }
+
+  // getTransaction(): Observable<BlockchainTransactionDetailsDto[]> {
+  //   return this.http.get<BlockchainTransactionDetailsDto[]>(`${this.urlTransactionBlocks}`);
   // }
 }
 
