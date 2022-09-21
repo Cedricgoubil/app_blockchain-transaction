@@ -11,12 +11,14 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { BlockchainTransactionListComponent } from './components/blockchain-transaction-list/blockchain-transaction-list.component';
 import { BlockchainTransactionDetailsComponent } from './components/blockchain-transaction-details/blockchain-transaction-details.component';
+
 // Services
 import { BlockchainTransactionService } from './services/blockchain-transaction.service';
 
 // Pipes
 import { SearchFilterPipe } from './pipes/search-filter.pipe';
 
+// NgRx
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
