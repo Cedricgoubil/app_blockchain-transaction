@@ -1,6 +1,8 @@
+import { BlockchainTransactionDetailsDto } from './BlockchainTransactionDetailsDto';
+
 export class BlockchainTransactionListDto {
   cycle?: number;
-  level?: number;
+  level?: number | any;
   hash?: string;
   timestamp?: string;
   proto?: number;
@@ -20,4 +22,6 @@ export class BlockchainTransactionListDto {
     alias: string,
     address: string,
   }
+
+  blockchainTransactionDetails?: BlockchainTransactionDetailsDto
 }

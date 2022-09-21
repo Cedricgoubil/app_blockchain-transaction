@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
 import { BlockchainTransactionDetailsDto } from 'src/app/dto/BlockchainTransactionDetailsDto';
-import { BlockchainTransactionListDto } from 'src/app/dto/BlockchainTransactionListDto';
 import { BlockchainTransactionService } from 'src/app/services/blockchain-transaction.service';
 import * as fromAppStore from '../../store';
-import { filter, Observable, Subscription } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-blockchain-transaction-details',
@@ -13,25 +12,16 @@ import { filter, Observable, Subscription } from 'rxjs';
   styleUrls: ['./blockchain-transaction-details.component.css']
 })
 export class BlockchainTransactionDetailsComponent implements OnInit {
-  id?: string | any;
-  // allTransactionBlocksFormStores?: BlockchainTransactionListDto[] | any;
-  // transactionBlocks?: BlockchainTransactionDetailsDto[] | any;
-  // transaction?: BlockchainTransactionDetailsDto[] = [];
+  transactionBlock?: BlockchainTransactionDetailsDto[] | any;
+  transaction?: BlockchainTransactionDetailsDto[] = [];
 
-  allTransactionBlocksFromStore$: Observable<BlockchainTransactionListDto[]> | undefined;
-  transactionBlocks?: BlockchainTransactionDetailsDto[] | any;
-  // transaction?: BlockchainTransactionDetailsDto[] = [];
-
-  private subscription: Subscription;
-
-
-  transaction: BlockchainTransactionDetailsDto = new BlockchainTransactionDetailsDto();
-  transactionOrig?: BlockchainTransactionDetailsDto;
+  // NgRx
+  allTransactionFromStore$: Observable<BlockchainTransactionDetailsDto[]> | undefined;
 
   constructor(
-    private blockchainTransactionService: BlockchainTransactionService,
     private appStore: Store<fromAppStore.AppBlockchainTransactionDetailsState>,
     private route: ActivatedRoute,
+    private blockchainTransactionService: BlockchainTransactionService
   ) { }
 
   ngOnInit(): void {
@@ -39,45 +29,35 @@ export class BlockchainTransactionDetailsComponent implements OnInit {
       const transactionId = p['id'];
       this.getTransaction(transactionId);
     });
+    this.getTransactionForBlocks();
   }
 
+  // Getting all transactions for block
+  getTransactionForBlocks() {
+    this.blockchainTransactionService.getTransaction().then((results) => {
+      this.transactionBlock = results;
+    })
+  }
+
+  // Filtering all transactions
   getTransaction(transactionId: string) {
-    this.subscription = this.appStore
-      .pipe(
-        select(fromAppStore.getTransactionCurrent),
-        filter((item) => !!item)
-      )
-      .subscribe((item) => {
-        this.transactionOrig = item;
-        this.transaction = { ...item } as BlockchainTransactionDetailsDto; // clone
-      });
+    this.blockchainTransactionService.getTransactionBlocks(transactionId).then((results) => {
+      this.transaction = this.transactionBlock?.filter((item: BlockchainTransactionDetailsDto) => item?.level === results?.level)
+    })
+  }
 
+  // NgRx Load
+  getAllTransactionsForBlock() {
+    this.appStore.dispatch(fromAppStore.getTransactionDetails());
+    this.allTransactionFromStore$ = this.appStore.select<any>(
+      (state: any) => state.appTransactionList.blockchainTransactionListItems
+    );
+  }
 
-    this.appStore.dispatch(
-      fromAppStore.getTransactionDetails({ id: transactionId })
+  // Filtering all transactions
+  getTransactionFromBlock() {
+    this.allTransactionFromStore$?.pipe(
+      map(items => items.filter(item => item.level)),
     );
   }
 }
-
-
-
-// Working but not using NgRx
-// getAllTransactionForBlocks() {
-//   this.blockchainTransactionService.getTransactionBlocks(this.id).then((results) => {
-//     this.allTransactionBlocks = results;
-//   })
-// }
-
-// getTransactionForBlocks() {
-//   this.blockchainTransactionService.getTransaction().then((results) => {
-//     this.transactionBlocks = results;
-//   })
-// }
-
-// getTransaction() {
-//   this.blockchainTransactionService.getTransactionBlocks(this.id).then((results) => {
-//     this.transaction = this.transactionBlocks?.filter((item: BlockchainTransactionDetailsDto) => item?.level === results?.level)
-//   })
-// }
-
-

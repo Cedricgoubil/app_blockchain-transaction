@@ -12,13 +12,18 @@ import * as fromAppStore from '../../store';
 })
 export class BlockchainTransactionListComponent implements OnInit {
   allTransactionBlocksFromStore$: Observable<BlockchainTransactionListDto[]> | undefined;
-
+  loadingBlocks$: Observable<boolean> | undefined;
   constructor(
     private appStore: Store<fromAppStore.AppBlockchainTransactionDetailsState>,
   ) { }
 
   ngOnInit(): void {
+    this.loadingBlocks$ = this.appStore.select<any>(
+      (state: any) => state.appTransactionList.blockchainTransactionListSearching
+    );
+
     this.appStore.dispatch(fromAppStore.loadAllBlockchainTransactionList());
+
     this.allTransactionBlocksFromStore$ = this.appStore.select<any>(
       (state: any) => state.appTransactionList.blockchainTransactionListItems
     );

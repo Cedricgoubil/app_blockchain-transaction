@@ -1,12 +1,12 @@
-import { BlockchainTransactionDetailsDto } from '../../dto/BlockchainTransactionDetailsDto';
+import { BlockchainTransactionListDto } from '../../dto/BlockchainTransactionListDto';
 import { createAction, props } from '@ngrx/store';
 
 export const getTransactionDetails = createAction(
-  '[App] Get Transaction Details Load', props<{ id: string }>()
+  '[App] Get Transaction Details Load'
 );
 export const getTransactionDetailsFinished = createAction(
   '[App] Get Transaction Details finished',
-  props<{ payLoad: BlockchainTransactionDetailsDto }>()
+  props<{ payLoad: BlockchainTransactionListDto[] }>()
 );
 export const getTransactionDetailsFailed = createAction(
   '[App] Get Transaction Details failed',

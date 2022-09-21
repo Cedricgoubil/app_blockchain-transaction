@@ -1,41 +1,48 @@
 <div class="container">
-  <table class="table table-hover table-striped">
-    <thead>
-      <tr>
-        <th scope="col"></th>
-        <th scope="col">Level</th>
-        <th scope="col" class="text-center">Proposer</th>
-        <th scope="col">Timestamp</th>
-        <th scope="col">Transaction count</th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        class="table-primary"
-        *ngFor="let transactionBlock of allTransactionBlocksFromStore$ | async"
-      >
-        <td></td>
-        <td>{{ transactionBlock?.level }}</td>
-        <td>
-          {{ transactionBlock?.proposer?.alias }}
-          <span *ngIf="transactionBlock?.proposer">/</span>
-          {{ transactionBlock?.proposer?.address }}
-        </td>
-        <td>{{ transactionBlock?.timestamp | date: "full" }}</td>
-        <td>number of transactions</td>
-        <td>
-          <button
-            routerLink="/blockchain-transaction-details/{{
-              transactionBlock?.level
-            }}"
-            type="button"
-            class="btn btn-link"
-          >
-            Details
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="text-center mt-5" *ngIf="loadingBlocks$ | async">
+    <h3><i class="fa-solid fa-spinner fa-spin"></i> Loading...</h3>
+  </div>
+  <div *ngIf="!(loadingBlocks$ | async)">
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Level</th>
+          <th scope="col" class="text-center">Proposer</th>
+          <th scope="col">Timestamp</th>
+          <th scope="col">Transaction count</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="table-primary"
+          *ngFor="
+            let transactionBlock of allTransactionBlocksFromStore$ | async
+          "
+        >
+          <td></td>
+          <td>{{ transactionBlock?.level }}</td>
+          <td>
+            {{ transactionBlock?.proposer?.alias }}
+            <span *ngIf="transactionBlock?.proposer">/</span>
+            {{ transactionBlock?.proposer?.address }}
+          </td>
+          <td>{{ transactionBlock?.timestamp | date: "full" }}</td>
+          <td>number of transactions</td>
+          <td>
+            <button
+              routerLink="/blockchain-transaction-details/{{
+                transactionBlock?.level
+              }}"
+              type="button"
+              class="btn btn-link"
+            >
+              Details
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

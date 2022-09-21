@@ -10,10 +10,12 @@ export class BlockchainTransactionDetailsEffects {
   getTransactionDetails$ = createEffect(() =>
     this.actions$.pipe(
       ofType(blockchainTransactionDetailsAction.getTransactionDetails),
-      switchMap((action) =>
-        this.blockchainTransactionService.searchById(action.id).pipe(
+      switchMap(() =>
+        this.blockchainTransactionService.getAllTransactionBlocks().pipe(
           map((blockchainTransaction) =>
-            blockchainTransactionDetailsAction.getTransactionDetailsFinished({ payLoad: blockchainTransaction })
+            blockchainTransactionDetailsAction.getTransactionDetailsFinished({
+              payLoad: blockchainTransaction,
+            })
           ),
           catchError((error) =>
             of(blockchainTransactionDetailsAction.getTransactionDetailsFailed({ payLoad: error }))

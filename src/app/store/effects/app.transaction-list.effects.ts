@@ -12,6 +12,7 @@ export class BlockchainTransactionListEffects {
       ofType(blockchainTransactionListAction.loadAllBlockchainTransactionList),
       switchMap(() =>
         this.blockchainTransactionService.getAllTransactionBlocks().pipe(
+          map(order => order.sort((a, b) => (b.level - a.level))),
           map((blockchainTransaction) =>
             blockchainTransactionListAction.loadAllBlockchainTransactionListFinished({
               payLoad: blockchainTransaction,

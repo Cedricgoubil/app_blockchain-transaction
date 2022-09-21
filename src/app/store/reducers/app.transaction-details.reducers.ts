@@ -1,17 +1,17 @@
-import { BlockchainTransactionDetailsDto } from '../../dto/BlockchainTransactionDetailsDto';
+import { BlockchainTransactionListDto } from '../../dto/BlockchainTransactionListDto';
 import { Action, createReducer, on } from '@ngrx/store';
 import * as fromAppBlockchainTransactionDetailsActions from '../actions/app.transaction-details.actions';
 
 export interface AppBlockchainTransactionDetailsState {
-  blockchainTransactionCurrent: BlockchainTransactionDetailsDto;
+  blockchainTransactionCurrent: BlockchainTransactionListDto[];
   blockchainTransactionSearching: boolean;
 }
 export const initialBlockchainTransactionDetailsState: AppBlockchainTransactionDetailsState = {
-  blockchainTransactionCurrent: new BlockchainTransactionDetailsDto,
+  blockchainTransactionCurrent: [],
   blockchainTransactionSearching: false,
 };
 
-const appBlockchainTransactionDetailsInternal = createReducer(
+const blockchainTransactionDetailsInternal = createReducer(
   initialBlockchainTransactionDetailsState,
   on(
     fromAppBlockchainTransactionDetailsActions.getTransactionDetails,
@@ -25,7 +25,7 @@ const appBlockchainTransactionDetailsInternal = createReducer(
     (state, { payLoad }) => ({
       ...state,
       blockchainTransactionSearching: false,
-      blockchainTransactionItems: payLoad,
+      blockchainTransactionCurrent: payLoad,
     })
   ),
 
@@ -34,7 +34,6 @@ const appBlockchainTransactionDetailsInternal = createReducer(
     (state, { payLoad }) => ({
       ...state,
       blockchainTransactionSearching: false,
-      blockchainTransactionItems: [],
     })
   )
 );
@@ -42,12 +41,12 @@ export function appBlockchainTransactionDetailsReducer(
   state: AppBlockchainTransactionDetailsState | undefined,
   action: Action
 ) {
-  return appBlockchainTransactionDetailsInternal(state, action);
+  return blockchainTransactionDetailsInternal(state, action);
 }
 
-export const getTransactionCurrent = (state: AppBlockchainTransactionDetailsState) => {
+export const getBlockchainTransactionCurrent = (state: AppBlockchainTransactionDetailsState) => {
   if (!state) {
-    return new BlockchainTransactionDetailsDto();
+    return new BlockchainTransactionListDto();
   }
   return state.blockchainTransactionCurrent;
 };
